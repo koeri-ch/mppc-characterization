@@ -1,5 +1,5 @@
 # mppc-characterization
-A few python scripts to help with the MPPC characterization.
+A few python scripts to help with the MPPC's characterization measurements.
 
 ## eventDisplay.py
 Loads the waveform information from a file and plots it using matplotlib. Usage:
