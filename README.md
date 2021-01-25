@@ -7,7 +7,7 @@ Loads the waveform information from a file and plots it using matplotlib. Usage:
 python eventDisplay.py <path_to_preamble> <path_to_waveform_file>
 ```
 where ```<path_to_preamble>``` is the location of the waveform preamble file,
-used to conver the data in ```<path_to_waveform_file>``` from screen points to mV by ns.
+used to convert the data in ```<path_to_waveform_file>``` from screen points to mV by ns.
 
 ## histogram_area.py
 Loads the files with the integrated waveform information.
