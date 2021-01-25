@@ -33,45 +33,58 @@ def mainFunction(path_to_file):
                 areas.append( float(value_str) )
 
                 # Sums the waveform's area to all others
-                sumAll += float(value_str)
+                areaAll += float(value_str)
 
     ## Suggested bin width
     # binwidth=2*0.08
     # numbins0 = np.arange(min(peaks_all),max(peaks_all)+binwidth,binwidth)
     
-    ## Otherwise use the automatic binwidth finder
+    ## Or use the automatic binwidth finder
     numbins0 = 'fd'
 
     # Create figure and axis
     fig, ax0 = plt.subplots(nrows=1, ncols=1, sharey=False, figsize=(5,5)) 
     
-    values, bins, patches = ax0.hist(peaks_all,  bins=numbins0, histtype='stepfilled', edgecolor='black',  facecolor='red', label="Pulse area, Run #{0:02d}".format(run_numbers[i]) )
+    # Plot the histogram
+    values, bins, patches = ax0.hist(areas,  bins=numbins0, histtype='stepfilled', edgecolor='black',  facecolor='red', label="Pulse area" )
     
+    # Find bin widths (should be equal)
     widths = np.diff(bins)
 
-    # widths = np.diff(bins)
-    # area_total = sum(widths*values)
-    # sumErrorArea = 0.0
-    # for i in range(0,len(widths)):
-    #     error_height = np.sqrt(values[i])
-    #     error_width  = 0.03*np.sqrt(widths[i])
-        
-    #     area = widths[i]*values[i]
-    #     error_area = area*np.sqrt( (error_height/values[i])**2 + (error_width/widths[i])**2 )
-        
-    #     sumErrorArea += error_area**2
-    
-    # area_total_error = np.sqrt(sumErrorArea)
-    
-    # print(area_total, area_total_error)
-    # print("Total histogram area. Run #{0:02d}: {1:5.0f} +/- {2:3.0f} mV".format(run_number, area_total, area_total_error))
+    # Find area of histogram
+    areaHisto = sum(widths*values)
+    sumErrorArea = 0.0
+    for i in range(0,len(widths)):
 
+        if ((widths[i] != 0.0) and (values[i] != 0)) :
+            
+            # Bin error as squareroot of counts
+            error_height = np.sqrt(values[i])
+
+            # Width error as 3% of width
+            error_width  = 0.03*np.sqrt(widths[i])
+            
+            # Area of bin
+            area = widths[i]*values[i]
+            
+            # Error in bin
+            error_area = area*np.sqrt( (error_height/values[i])**2 + (error_width/widths[i])**2 )
+            
+            # Error in quadrature
+            sumErrorArea += error_area**2
+    
+    # Total error is square-root of total squared errors
+    areaHisto_error = np.sqrt(sumErrorArea)
+    
+    # Adding labels to histogram
     ax0.set_ylabel("No. of events/{0:4.1f}".format(widths[0])+" mV"+r"$\cdot$"+"ns")
     ax0.set_xlabel("Pulse area (mV"+r"$\cdot$"+"ns)")
     ax0.legend()
 
     # Print stats
-    print("Run #{0:02d}. Total area: {1:e} mV.s".format(run_numbers[i],sumAll*1.e-9))
+    print("Summed waveform areas: {0:e} mV.ns".format(areaAll))
+    print("Histogram area: {0:e} mV.ns".format(areaHisto))
+    print("Histogram area error: {0:e} mV.ns".format(areaHisto_error))
 
     # Change layout
     plt.tight_layout()
@@ -85,7 +98,8 @@ def mainFunction(path_to_file):
     # plt.close()
 
 ### Pre-routine check
-if 
-
+if len(sys.argv) == 2:
+    # Send file location to main function
+    mainFunction(sys.argv[1])
 else:
-    print("Usage: ")
+    print("Usage: python path_to_area_file")
