@@ -7,7 +7,7 @@ import numpy as np
 import time
 
 def mainFunction(path_to_file):
-## Opens the peak files and plots a histogram
+## Opens the areas files and plots a histogram
 ## The file with the are is expected to have two columns,
 ## one with the waveform's name 
 ## and another the waveform's area
