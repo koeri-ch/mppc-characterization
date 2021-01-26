@@ -19,3 +19,9 @@ Usage:
 python histogram_area.py <path_to_areas_file>
 ```
 where ```<path_to_areas_file>``` is the location of your file, e.g. ```/home/user/data/areas-01.dat```
+
+## histogram_peaks.py
+Loads the files with the pulses found in the waveform and plots them in three different histograms.
+It also estimates the percentage of pulses that are first, second and third to appear in the waveforms.
+
+Usage: similar to the ```histogram_area.py```. 
