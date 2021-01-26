@@ -37,8 +37,8 @@ def mainFunction(path_to_file):
                     if value_str:
                         
                         # All pulses go to a same array and sum.
-                        peaks_all.append( float(value_str)/peHeight/1.0 )
-                        sumAll += float(value_str)/peHeight/1.0
+                        peaks_all.append( float(value_str) )
+                        sumAll += float(value_str)
                         
                         # Now we split them by their order on the waveform
                         peaks[i-1].append( float(value_str))
@@ -59,18 +59,42 @@ def mainFunction(path_to_file):
     colors2 = ['grey','black','navy']
     
     # Plot the histograms
-    ax0.hist(peaks_all, bins=numbins_all, histtype='stepfilled', edgecolor=colors2[1], facecolor=colors2[0], label="All peaks")
-    ax1.hist(peaks[0],  bins=numbins0, histtype='stepfilled', edgecolor=colors2[1], facecolor=colors2[0], label="First peak in pulse")
-    bins, pos, _ = ax2.hist(peaks[1],  bins=numbins1, histtype='stepfilled', edgecolor=colors2[1], facecolor=colors2[0], label="Second peak in pulse")
-    ax3.hist(peaks[2],  bins=numbins2, histtype='stepfilled', edgecolor=colors2[1], facecolor=colors2[0], label="Third peak in pulse")
+    bins, pos, _ = ax0.hist(peaks_all, bins=numbins_all, histtype='stepfilled', edgecolor=colors2[1], facecolor=colors2[0], label="All pulses")
+    ax1.hist(peaks[0],  bins=numbins0, histtype='stepfilled', edgecolor=colors2[1], facecolor=colors2[0], label="First pulse")
+    ax2.hist(peaks[1],  bins=numbins1, histtype='stepfilled', edgecolor=colors2[1], facecolor=colors2[0], label="Second pulse")
+    ax3.hist(peaks[2],  bins=numbins2, histtype='stepfilled', edgecolor=colors2[1], facecolor=colors2[0], label="Third pulse")
 
+    # Bin widths
     deltapos = pos[1]-pos[0]
+    
+    # Set y label
     ax0.set_ylabel("No. of events/{0:4.1f} mV".format(deltapos))
 
     # Add x label and legend to all plots
     for axi in axes:
-        axi.set_xlabel("Amplitude (p.e.)")
+        axi.set_xlabel("Amplitude (mV)")
         axi.legend()
+
+    ## Printing some stats:
+    print("\nSummed up amplitudes:")
+    print("   All pulses (mV)    : {0}".format(sumAll) )
+    print("   First pulses (mV)  : {0}".format(sumPeaks[0]) )
+    print("   Second pulses (mV) : {0}".format(sumPeaks[1]) )
+    print("   Third pulses (mV)  : {0}".format(sumPeaks[2]) )        
+
+    ## Percentages:
+    print("\nStats:")
+    print("   Pulses found       : {0}".format(len(peaks_all)) )
+    print("   First pulses       : {0:.2%}".format(len(peaks[0])/float(len(peaks_all)) ) ) 
+    print("   Second pulses      : {0:.2%}".format(len(peaks[1])/float(len(peaks_all)) ) )
+    print("   Third pulses       : {0:.2%}".format(len(peaks[2])/float(len(peaks_all)) ) )
+    
+    # Other pulses
+    sumRemainingPeaks = 0
+    for i in range(3,100):
+        if len(peaks[i]) != 0:
+            sumRemainingPeaks += len(peaks[i])
+    print("   Other pulses       : {0:.2%}".format(sumRemainingPeaks/float(len(peaks_all)) ) )
 
     ## Tight layout and show
     plt.tight_layout()
