@@ -1,6 +1,5 @@
 import scipy 
 import numpy as np 
-import pyvisa
 import sys
 import matplotlib.pyplot as plt
 
@@ -44,10 +43,13 @@ def mainFunction(path_to_preamble, path_to_event):
     y_mV = 1.0*1.e3*y_V
 
     # Plot
-    plt.plot(x_ns,y_mV)
-    plt.xlim([x_ns[0], x_ns[-1]])
-    plt.xlabel("Time (ns)")
-    plt.ylabel("Amplitude (mV)")
+    fig, ax0 = plt.subplots(nrows=1, ncols=1, sharey=False, figsize=(6,6)) 
+    ax0.plot(x_ns,y_mV, color='black')
+    ax0.set_xticks(np.arange(0.0,400.0,10.0))
+    ax0.tick_params(direction='in', colors='black')
+    ax0.set_xlim([x_ns[0], x_ns[-1]])
+    ax0.set_xlabel("Time (ns)")
+    ax0.set_ylabel("Amplitude (mV)")
     plt.show()
 
 ## Initial routine

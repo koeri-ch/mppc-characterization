@@ -96,14 +96,18 @@ def mainFunction(path_to_file):
             sumRemainingPeaks += len(peaks[i])
     print("   Other pulses       : {0:.2%}".format(sumRemainingPeaks/float(len(peaks_all)) ) )
 
-    ## Tight layout and show
+    ## Tight layout
     plt.tight_layout()
-    plt.show()
+    
+    ## Show only
+    # plt.show()
 
-    ## Tight layout and save
-    # plt.tight_layout()
-    # name_image = "./height-several-{0}V-Run{1:02d}.png".format(voltage,run_number)
-    # plt.savefig(name_image, dpi = 600)
+    ## Use original file name to create an image file
+    splitname1 = path_to_file.split("/")
+    file_name  = splitname1[-1].replace(".dat",".png")
+    plt.savefig("./{0}".format(file_name), dpi = 600)
+
+    ## END OF MAIN FUNCTION
 
 ### Pre-mainFunction check
 if len(sys.argv) == 2:
