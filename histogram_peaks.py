@@ -84,10 +84,20 @@ def mainFunction(path_to_file):
 
     ## Percentages:
     print("\nStats:")
-    print("   Pulses found       : {0}".format(len(peaks_all)) )
-    print("   First pulses       : {0:.2%}".format(len(peaks[0])/float(len(peaks_all)) ) ) 
-    print("   Second pulses      : {0:.2%}".format(len(peaks[1])/float(len(peaks_all)) ) )
-    print("   Third pulses       : {0:.2%}".format(len(peaks[2])/float(len(peaks_all)) ) )
+    totalpulses=len(peaks_all)
+    firstpulses=len(peaks[0])
+    secondpulses=len(peaks[1])
+    thirdpulses=len(peaks[2])
+    firstpercentage = firstpulses/totalpulses
+    secondpercentage = secondpulses/totalpulses
+    thirdpercentage = thirdpulses/totalpulses
+    firstpercentage_error = firstpercentage*np.sqrt( (np.sqrt(firstpulses)/firstpulses)**2 + (np.sqrt(totalpulses)/np.sqrt(totalpulses)**2 ))
+    secondpercentage_error = secondpercentage*np.sqrt( (np.sqrt(secondpulses)/secondpulses)**2 + (np.sqrt(totalpulses)/np.sqrt(totalpulses)**2 ))
+    thirdpercentage_error = thirdpercentage*np.sqrt( (np.sqrt(thirdpulses)/thirdpulses)**2 + (np.sqrt(totalpulses)/np.sqrt(totalpulses)**2 ))
+    print("   Pulses found       : {0} +/- {1}".format(totalpulses,int(np.sqrt(totalpulses))) )
+    print("   First pulses       : {0:.2%} +/- {1:.0%}".format(firstpercentage, firstpercentage_error))  
+    print("   Second pulses      : {0:.2%} +/- {1:.0%}".format(secondpercentage, secondpercentage_error))
+    print("   Third pulses       : {0:.2%} +/- {1:.0%}".format(thirdpercentage, thirdpercentage_error))
     
     # Other pulses
     sumRemainingPeaks = 0
