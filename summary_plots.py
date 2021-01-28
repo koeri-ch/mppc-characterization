@@ -28,31 +28,36 @@ def mainFunction(path_to_file):
 
     # Read through lines 
     # and retrieve peaks
-    totalpulses, totalpulses_errors   = np.loadtxt(path_to_file, usecols=(0,1), delimiter=", ", unpack=True)
-    firstpulses, firstpulses_errors   = np.loadtxt(path_to_file, usecols=(2,3), delimiter=", ", unpack=True)
-    secondpulses, secondpulses_errors = np.loadtxt(path_to_file, usecols=(4,5), delimiter=", ", unpack=True)
-    thirdpulses, thirdpulses_errors   = np.loadtxt(path_to_file, usecols=(6,7), delimiter=", ", unpack=True)
+    # totalpulses, totalpulses_errors   = np.loadtxt(path_to_file, usecols=(0,1), delimiter=", ", unpack=True)
+    # firstpulses, firstpulses_errors   = np.loadtxt(path_to_file, usecols=(2,3), delimiter=", ", unpack=True)
+    # secondpulses, secondpulses_errors = np.loadtxt(path_to_file, usecols=(4,5), delimiter=", ", unpack=True)
+    # thirdpulses, thirdpulses_errors   = np.loadtxt(path_to_file, usecols=(6,7), delimiter=", ", unpack=True)
+
+    totalpulses  = np.loadtxt(path_to_file, usecols=(0), delimiter=", ", unpack=True)
+    firstpulses  = np.loadtxt(path_to_file, usecols=(1), delimiter=", ", unpack=True)
+    secondpulses = np.loadtxt(path_to_file, usecols=(2), delimiter=", ", unpack=True)
+    thirdpulses  = np.loadtxt(path_to_file, usecols=(3), delimiter=", ", unpack=True)
+
 
     ## starting two plots
     fig, (ax0,ax1,ax2,ax3) = plt.subplots(nrows=1, ncols=4, sharey=False, figsize=(20,5)) 
     axes = (ax0,ax1,ax2,ax3)
 
     x_placeholder = np.arange(1,4,1)
-    ax0.errorbar(x=x_placeholder, y=totalpulses, yerr=totalpulses_errors, 
-                        fmt='none', ecolor='black', barsabove=True, capsize=2.0)
+    # ax0.errorbar(x=x_s   fmt='none', ecolor='black', barsabove=True, capsize=2.0)
     ax0.plot(x_placeholder, totalpulses, 'o', color='green', label='Total pulses')
 
 
-    ax1.errorbar(x=x_placeholder, y=firstpulses, yerr=firstpulses_errors, 
-                        fmt='none', ecolor='black', barsabove=True, capsize=2.0)
+    # ax1.errorbar(x=x_placeholder, y=firstpulses, yerr=firstpulses_errors, 
+    #                     fmt='none', ecolor='black', barsabove=True, capsize=2.0)
     ax1.plot(x_placeholder, firstpulses, 'o', color='blue', label='First pulses')
 
-    ax2.errorbar(x=x_placeholder, y=secondpulses, yerr=secondpulses_errors, 
-                        fmt='none', ecolor='black', barsabove=True, capsize=2.0)
+    # ax2.errorbar(x=x_placeholder, y=secondpulses, yerr=secondpulses_errors, 
+    #                     fmt='none', ecolor='black', barsabove=True, capsize=2.0)
     ax2.plot(x_placeholder, secondpulses, 'o', color='orange', mec='black', label='Second pulses')
 
-    ax3.errorbar(x=x_placeholder, y=thirdpulses, yerr=thirdpulses_errors, 
-                        fmt='none', ecolor='black', barsabove=True, capsize=2.0)
+    # ax3.errorbar(x=x_placeholder, y=thirdpulses, yerr=thirdpulses_errors, 
+    #                     fmt='none', ecolor='black', barsabove=True, capsize=2.0)
     ax3.plot(x_placeholder, thirdpulses, 'o', color='red', mec='black',  label='Third pulses')
 
 
@@ -60,9 +65,9 @@ def mainFunction(path_to_file):
         axi.set_xlim([0.5,3.5])
         axi.set_xticks(x_placeholder)
         axi.set_xticklabels(['Open', 'Reflective', 'Black'])
-        axi.set_ylabel("No. of pulses")
+        axi.set_ylabel("Summed up amplitudes (mV)")
         axi.legend()
-    ax1.set_ylim([93000,107000])
+    # ax1.set_ylim([93000,107000])
 
     plt.tight_layout()
     # plt.show()
