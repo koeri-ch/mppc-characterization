@@ -1,0 +1,78 @@
+import scipy 
+import numpy as np 
+import sys, os, glob
+import matplotlib.pyplot as plt
+
+def readit(waveform_directory):
+## Reads the waveform file
+    return np.loadtxt("{0}".format(waveform_directory), usecols=(0,1), delimiter=", ", unpack=True)
+
+def mainFunction(path_to_preamble, path_to_waveforms, numberImages):
+    ## Opens file, corrects units 
+    ## and plots the waveform.
+
+    os.chdir(path_to_waveforms)
+    listoffiles = glob.glob("*.dat")
+
+    imageCounter = 0
+    for path_to_event in listoffiles:
+        
+        if imageCounter < int(numberImages):
+
+            # Open correct units string
+            preamble_file = open(path_to_preamble,'r')
+            preamble_raw  = preamble_file.readlines()
+            details       = preamble_raw[0].split(';')
+            preamble_file.close()
+
+            # Open details:
+            XINcr  = float(details[8])
+            PT_Off = float(details[9])
+            XZERo =  float(details[10])
+            XUNit =  details[11]
+            YMUlt =  float(details[12])
+            YZEro =  float(details[13])
+            YOFF  =  float(details[14])
+            YUNIT =  details[15]
+            WFID  =  details[6]
+            WFID_details = WFID.split(', ')
+            VperDIV = float(WFID_details[2].replace('V/div',''))
+            SperDIV = float(WFID_details[3].replace('s/div',''))
+            offset_accuracy = 0.002*abs(   YZEro+YMUlt*(YZEro - YOFF -YOFF)    )+1.5/1000.0+0.1*VperDIV
+            XOffSet  = 1
+
+            # Read data from file
+            x, y = readit(path_to_event)
+
+            # Transform units
+            x_s = XZERo+XINcr*(XOffSet+np.asarray(x)-PT_Off)
+            y_V = YZEro+YMUlt*(np.asarray(y)-YOFF)
+            x_ns = 1.e9*x_s - x_s[0]*1.e9
+            y_mV = 1.0*1.e3*y_V
+
+            # Plot
+            fig, ax0 = plt.subplots(nrows=1, ncols=1, sharey=False, figsize=(6,6)) 
+            ax0.plot(x_ns,y_mV, color='black')
+
+            ax0.set_xlim([x_ns[0],x_ns[-1]])
+            # ax0.set_ylim([y_mV])
+
+            ax0.set_xticks(np.arange(0.0,400.0,10.0))
+            ax0.tick_params(direction='in', colors='black')
+            ax0.set_xlim([x_ns[0], x_ns[-1]])
+            ax0.set_xlabel("Time (ns)")
+            ax0.set_ylabel("Amplitude (mV)")
+
+            split1 = path_to_event.split("/")
+            name_image = split1[-1].replace(".dat",".png")
+            plt.savefig("../images/{0}".format(name_image))
+            plt.close()
+
+            imageCounter += 1
+
+## Initial routine
+if len(sys.argv) == 4:
+    mainFunction(sys.argv[1], sys.argv[2], sys.argv[3])
+else:
+    print("Usage: python eventDisplay.py path_to_preamble path_to_event")
+
