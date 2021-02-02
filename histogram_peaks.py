@@ -52,21 +52,25 @@ def mainFunction(path_to_file):
 
     # Read through lines 
     # and retrieve peaks
+    eventCounter = 0
     for line in lines:
-        split1 = line.split(", ")
-        if len(split1) > 1:
-            for i in range(1,len(split1)):
-                if split1[i]:
-                    value_str = split1[i].replace("\n","")
-                    if value_str:
-                        
-                        # All pulses go to a same array and sum.
-                        peaks_all.append( float(value_str) )
-                        sumAll += float(value_str)
-                        
-                        # Now we split them by their order on the waveform
-                        peaks[i-1].append( float(value_str))
-                        sumPeaks[i-1] += float(value_str)
+        if eventCounter < 400000:
+            split1 = line.split(", ")
+            if len(split1) > 1:
+                for i in range(1,len(split1)):
+                    if split1[i]:
+                        value_str = split1[i].replace("\n","")
+                        if value_str:
+                            
+                            # All pulses go to a same array and sum.
+                            peaks_all.append( float(value_str) )
+                            sumAll += float(value_str)
+                            
+                            # Now we split them by their order on the waveform
+                            peaks[i-1].append( float(value_str))
+                            sumPeaks[i-1] += float(value_str)
+
+            eventCounter += 1
 
     # The figure and axes
     fig, (ax0, ax1, ax2, ax3) = plt.subplots(nrows=1, ncols=4, sharey=False, figsize=(15,3)) 

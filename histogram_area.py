@@ -46,7 +46,7 @@ def mainFunction(path_to_file):
     fig, ax0 = plt.subplots(nrows=1, ncols=1, sharey=False, figsize=(5,5)) 
     
     # Plot the histogram
-    values, bins, patches = ax0.hist(areas,  bins=numbins0, histtype='stepfilled', edgecolor='black',  facecolor='red', label="Pulse area" )
+    values, bins, patches = ax0.hist(areas,  bins=numbins0, histtype='stepfilled', edgecolor='black',  facecolor='white', label="Pulse area" )
     
     # Find bin widths (should be equal)
     widths = np.diff(bins)
@@ -79,23 +79,28 @@ def mainFunction(path_to_file):
     # Adding labels to histogram
     ax0.set_ylabel("No. of events/{0:4.1f}".format(widths[0])+" mV"+r"$\cdot$"+"ns")
     ax0.set_xlabel("Pulse area (mV"+r"$\cdot$"+"ns)")
+    ax0.set_xlim([0.0,12000.])
     ax0.legend()
 
     # Print stats
-    print("Summed waveform areas: {0:e} mV.ns".format(areaAll))
-    print("Histogram area: {0:e} mV.ns".format(areaHisto))
-    print("Histogram area error: {0:e} mV.ns".format(areaHisto_error))
+    print(len(areas))
+    print("All units in mV.ns")
+    print("Summed waveform areas     : {0:e}".format(areaAll))
+    print("Average area per waveform : {0:e}".format(areaAll/len(areas)))
+    print("Histogram area            : {0:e}".format(areaHisto))
+    print("Histogram area error      : {0:e}".format(areaHisto_error))
 
     # Change layout
     plt.tight_layout()
 
     # Show histogram
-    plt.show()
+    # plt.show()
 
     ## You can save it as well
-    # name_image = "./areas-histogram.png"
-    # plt.savefig(name_image, dpi = 300)
-    # plt.close()
+    splitname1 = path_to_file.split("/")
+    file_name  = splitname1[-1].replace(".dat",".png")
+    plt.savefig(file_name, dpi = 300)
+    plt.close()
 
 ### Pre-routine check
 if len(sys.argv) == 2:
